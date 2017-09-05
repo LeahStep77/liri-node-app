@@ -1,9 +1,3 @@
-//console.log("hello");
-//var input = process.argv;
-//var choice = input[2];
-// var outputChoice;
-// var title = input[3];
-
 var keys = require("./keys.js");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
@@ -31,41 +25,39 @@ var getTweets = function () {
 
 
 var getSpotify = function(songName){ 
-	var spotify = new Spotify({
-		id: 'removed', //how do i bring in keys from keys.js --- This does not work    id: keys.spotifyKeys.id  also tried -new Spotify (keys.spotifyKeys)
-		secret: 'removed'
-	});
-
+	var spotify = new Spotify(keys.spotifyKeys);
+	
 	spotify.search({ type: 'track', query: songName}, function(err, data) {
 		if (err) {
 			return console.log('Error occurred: ' + err);
 		}
-		//console.log(data.tracks.items); 
+		
 		var songs = data.tracks.items;
 		for (var i=0; i<songs.length; i++){
 			//console.log(songs[i]);
 			console.log(songs[i].name);
 			console.log(songs[i].album.name);
+			console.log(songs[i].artists[0].name);
+			console.log(songs[i].preview_url);
 			console.log('**********');
-			//can't get url or artist name
 		}
 	});
 }
-
+//////////////////////////////////////my key doesn't work//////////////////////////////////////////////
 var getMovie = function (movieNmae){
-	request('http://www.omdbapi.com/?apikey=' +keys.omdbKeys+  '&t='+movieNmae+ '&r=json', function (error, response, body) {
-		if(!error && response.statusCode == 200) {
-	  		var jsonData = JSON.parse(body);
-		  	console.log(jsonData.Title)
-		  	//console.log(body);
-		  	// console.log(Title);
+	Request('https://www.omdbapi.com/?i=tt3896198&apikey=Removed', function (error, response, body) {
+		//if(!error && response.statusCode == 200) {
+	  		//var jsonData = JSON.parse(body);
+		  	//console.log(jsonData);
+		  	console.log(body);
+		  	//console.log(Title);
 		  	// console.log(Year);
 		  	// console.log(plot);
-	  	}
-		else {
-			console.log('error:', error); // Print the error if one occurred 
-			console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
-		}
+	 //  	}
+		// // else {
+		// // 	console.log('error:', error); // Print the error if one occurred 
+		// // 	console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+		// }
 	  
 	});
 }
@@ -80,7 +72,7 @@ var pick = function(caseData, FunctionData) {
 		case 'spotify-song':
 			getSpotify(FunctionData)
 			break;
-		case'movie-details':
+		case'movie':
 			getMovie()
 			break;
 		default:
